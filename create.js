@@ -18,7 +18,7 @@ export const main = handler(async (event, context) => {
         Item: {
             userId: event.requestContext.identity.cognitoIdentityId,
             noteId: uuid.v1(),
-            context: data.content,
+            content: data.content,
             attachment: data.attachment,
             createdAt: Date.now()
         }
@@ -26,4 +26,4 @@ export const main = handler(async (event, context) => {
     await dynamoDb.put(params);
 
     return params.Item;
-})
+});

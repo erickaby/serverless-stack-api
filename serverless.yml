@@ -98,6 +98,7 @@ functions:
           method: delete
           cors: true
           authorizer: aws_iam
+          
   billing:
     # Defines an HTTP API endpoint that calls the main function in billing.js
     # - path: url path is /billing
@@ -109,6 +110,7 @@ functions:
           method: post
           cors: true
           authorizer: aws_iam
+
 # Create our resources with separate CloudFormation templates
 resources:
   # API Gateway Errors
