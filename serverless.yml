@@ -122,11 +122,11 @@ functions:
           cors: true
           authorizer: aws_iam
 
-  role-list:
-    handler: role-list.main
+  user-list:
+    handler: user-list.main
     events:
       - http:
-          path: role-list
+          path: user-list
           method: get
           cors: true
           authorizer: aws_iam

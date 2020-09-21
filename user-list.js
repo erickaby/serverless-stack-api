@@ -8,9 +8,13 @@ export const main = handler(async (event, context) => {
     const params = {
         UserPoolId: process.env.userPoolId
     };
-    const result = await cognitoidentityserviceprovider.listUsers(params);
-    if ( ! result.Users ) {
-        throw new Error('Users not found.');
-    }
-    return result.Users;
+    return await cognitoidentityserviceprovider.listUsers(params).promise()
+        .then((res) => {
+            return res.Users;
+        })
+        .catch((err) => {
+            if (err) {
+                throw new Error('Error getting user list.');
+            }
+        });
 });
