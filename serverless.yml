@@ -26,6 +26,7 @@ provider:
   # under process.env.
   environment:
     tableName: ${self:custom.tableName}
+    userPoolId: !Ref CognitoUserPool
     stripeSecretKey: ${env:STRIPE_SECRET_KEY}
 
   # 'iamRoleStatements' defines the permission policy for the Lambda function.
@@ -118,6 +119,15 @@ functions:
       - http:
           path: billing
           method: post
+          cors: true
+          authorizer: aws_iam
+
+  role-list:
+    handler: role-list.main
+    events:
+      - http:
+          path: role-list
+          method: get
           cors: true
           authorizer: aws_iam
 
