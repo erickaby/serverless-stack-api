@@ -36,8 +36,8 @@ provider:
       Action:
         - cognito-idp:*
       Resource:
-        - "Fn::GetAtt": [CognitoIdentityPool, Arn]
-        
+        - "Fn::GetAtt": [ CognitoUserPool, Arn ]
+
     - Effect: Allow
       Action:
         - dynamodb:DescribeTable
