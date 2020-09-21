@@ -34,6 +34,12 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
+        - cognito-idp:*
+      Resource:
+        - "Fn::GetAtt": [CognitoIdentityPool, Arn]
+        
+    - Effect: Allow
+      Action:
         - dynamodb:DescribeTable
         - dynamodb:Query
         - dynamodb:Scan
