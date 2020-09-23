@@ -6,7 +6,7 @@ const cognitoidentityserviceprovider  = new AWS.CognitoIdentityServiceProvider()
 export const main = handler(async (event, context) => {
     const params = {
         UserPoolId: process.env.userPoolId,
-        Username: event.pathParameters.username
+        Username: event.pathParameters.id
     };
 
     return await Promise.all([
@@ -18,7 +18,7 @@ export const main = handler(async (event, context) => {
         })
         .catch((err) => {
             if (err) {
-                throw new Error(`Error getting user ${event.pathParameters.username}.`);
+                throw new Error(`Error getting user ${event.pathParameters.id}.`);
             }
         });
 });

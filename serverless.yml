@@ -141,7 +141,7 @@ functions:
     handler: user-get.main
     events:
       - http:
-          path: user-get
+          path: user-get/{id}
           method: get
           cors: true
           authorizer: aws_iam
