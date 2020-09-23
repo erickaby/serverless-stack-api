@@ -137,6 +137,24 @@ functions:
           cors: true
           authorizer: aws_iam
 
+  user-get:
+    handler: user-get.main
+    events:
+      - http:
+          path: user-get
+          method: get
+          cors: true
+          authorizer: aws_iam
+
+  user-create:
+    handler: user-create.main
+    events:
+      - http:
+          path: user-create
+          method: post
+          cors: true
+          authorizer: aws_iam
+
 # Create our resources with separate CloudFormation templates
 resources:
   # API Gateway Errors
