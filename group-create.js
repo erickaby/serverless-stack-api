@@ -15,6 +15,8 @@ export const main = handler(async (event, context) => {
         Path: '/notes-app'
     }
 
+    //https://aws.amazon.com/premiumsupport/knowledge-center/lambda-function-assume-iam-role/
+
     const params = {
         UserPoolId: process.env.userPoolId,
         GroupName: data.groupName,
