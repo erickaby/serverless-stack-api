@@ -155,6 +155,15 @@ functions:
           cors: true
           authorizer: aws_iam
 
+  group-list:
+    handler: group-list.main
+    events:
+      - http:
+          path: group-list
+          method: get
+          cors: true
+          authorizer: aws_iam
+
   group-create:
     handler: group-create.main
     events:
