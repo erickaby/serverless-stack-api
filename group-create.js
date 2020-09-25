@@ -4,36 +4,56 @@ import AWS from "aws-sdk";
 
 const cognitoidentityserviceprovider  = new AWS.CognitoIdentityServiceProvider();
 const iam = new AWS.IAM();
+// const sts = new AWS.STS();
 
 export const main = handler(async (event, context) => {
     const data = JSON.parse(event.body);
 
-    const iamRoleParams = {
-        AssumeRolePolicyDocument: "",
-        RoleName: data.groupName,
-        Description: data.description,
-        Path: '/notes-app'
-    }
-
-    //https://aws.amazon.com/premiumsupport/knowledge-center/lambda-function-assume-iam-role/
-
-    const params = {
-        UserPoolId: process.env.userPoolId,
-        GroupName: data.groupName,
-        Description: data.description,
-
+    const createRoleParams = {
+        AssumeRolePolicyDocument: JSON.stringify({
+            Version: '2012-10-17',
+            Statement: [
+                {
+                    Effect: 'Allow',
+                    Principal: {
+                        Federated: 'cognito-identity.amazonaws.com'
+                    },
+                    Action: [
+                        'sts:AssumeRoleWithWebIdentity'
+                    ]
+                }
+            ]
+        }),
+        Path: '/scratch/groups/',
+        RoleName: data.name
     };
 
-
-
-    return await cognitoidentityserviceprovider.adminCreateUser(params).promise()
-        .then((res) => {
-            return res;
+    // Create IAM Role
+    return iam.createRole(createRoleParams).promise()
+        .then((roleRes) => {
+            // Create Cognito Group && Attach Role
+            return cognitoidentityserviceprovider.createGroup({
+                GroupName: data.name,
+                UserPoolId: process.env.userPoolId,
+                Precedence: data.precedence,
+                RoleArn: roleRes.Role.Arn
+            }).promise()
+                .then((groupRes) => {
+                    return { roleRes, groupRes };
+                })
+                .catch((err) => {
+                    console.log(err);
+                    if (err) {
+                        throw new Error('Error creating group.');
+                    }
+                });
         })
         .catch((err) => {
             console.log(err);
             if (err) {
-                throw new Error(`Error creating user.`);
+                throw new Error('Error creating role.');
             }
         });
+
+    //https://aws.amazon.com/premiumsupport/knowledge-center/lambda-function-assume-iam-role/
 });
